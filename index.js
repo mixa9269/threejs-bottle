@@ -32,22 +32,17 @@ function init() {
 
   const loader = new THREE.GLTFLoader();
   loader.load("./scene.glb", function (gltf) {
-    gltf.scene.traverse(({name, material, ...rest}) => {
-      if (name === 'label') {
-        new THREE.TextureLoader().load(
-          "./label.png",
-          texture => {
-            //Update Texture
-            material.map = texture;
-            material.transparent = true;
-            material.side = 3;
-            material.alphaTest= 0.5;
-            material.needsUpdate = true;
-            console.log(rest);
-            console.log(material)
-            render();
-          },
-        )
+    gltf.scene.traverse(({ name, material }) => {
+      if (name === "label") {
+        new THREE.TextureLoader().load("./label.png", (texture) => {
+          //Update Texture
+          material.map = texture;
+          material.transparent = true;
+          material.side = 3;
+          material.alphaTest = 0.5;
+          material.needsUpdate = true;
+          render();
+        });
       }
     });
     scene.add(gltf.scene);
@@ -67,7 +62,7 @@ function init() {
 
   // controls
 
-  controls = new THREE.OrbitControls(camera, renderer.domElement, );
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.minPolarAngle = Math.PI / 2;
   controls.maxPolarAngle = Math.PI / 2;
   controls.addEventListener("change", render);
@@ -87,5 +82,5 @@ function onWindowResize(event) {
 
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-  render()
+  render();
 }
