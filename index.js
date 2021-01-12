@@ -40,10 +40,20 @@ function init() {
           material.transparent = true;
           material.side = 3;
           material.alphaTest = 0.5;
+          material.polygonOffset = true;
+          material.polygonOffsetUnits = 1;
+          material.polygonOffsetFactor = -1;
           material.needsUpdate = true;
           render();
         });
       }
+      if (name === "Material_2") {
+        material.polygonOffset = true;
+        material.polygonOffsetUnits = 1;
+        material.polygonOffsetFactor = -1;
+        material.needsUpdate = true;
+      }
+      render();
     });
     scene.add(gltf.scene);
   });
