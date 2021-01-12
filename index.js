@@ -25,13 +25,13 @@ function init() {
     0.1,
     1000
   );
-  camera.position.z = 250;
-  camera.position.y = -2;
+  camera.position.z = 2.5;
+  camera.position.y = 0;
 
   // load bottle
 
   const loader = new THREE.GLTFLoader();
-  loader.load("./scene.glb", function (gltf) {
+  loader.load("./bottle.glb", function (gltf) {
     gltf.scene.traverse(({ name, material }) => {
       if (name === "label") {
         new THREE.TextureLoader().load("./label.png", (texture) => {
@@ -40,20 +40,9 @@ function init() {
           material.transparent = true;
           material.side = 3;
           material.alphaTest = 0.5;
-          material.polygonOffset = true;
-          material.polygonOffsetUnits = 1;
-          material.polygonOffsetFactor = -100;
-          material.needsUpdate = true;
           render();
         });
       }
-      if (name === "Material_2") {
-        material.polygonOffset = true;
-        material.polygonOffsetUnits = 1;
-        material.polygonOffsetFactor = -1;
-        material.needsUpdate = true;
-      }
-      render();
     });
     scene.add(gltf.scene);
   });
