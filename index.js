@@ -42,7 +42,7 @@ function init() {
           material.alphaTest = 0.5;
           material.polygonOffset = true;
           material.polygonOffsetUnits = 1;
-          material.polygonOffsetFactor = -1;
+          material.polygonOffsetFactor = -100;
           material.needsUpdate = true;
           render();
         });
