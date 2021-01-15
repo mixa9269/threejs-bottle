@@ -41,6 +41,7 @@ function init() {
           material.side = 3;
           material.alphaTest = 0.5;
           render();
+          window.ReactNativeWebView?.postMessage({type: 'init'});
         });
       }
     });
