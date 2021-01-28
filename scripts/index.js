@@ -2,6 +2,7 @@ var camera, scene, renderer;
 var bottle, cube_geometry, cube_material;
 var controls;
 var light;
+let bottleObj;
 
 window.addEventListener("message", function(data) {
   if (!data.data) {
@@ -102,6 +103,14 @@ function loadBottle(bottle, label) {
         });
       }
     });
+    removeOldBottleIfExists();
+    bottleObj = gltf.scene;
     scene.add(gltf.scene);
   });
+}
+
+function removeOldBottleIfExists() {
+  if (bottleObj) {
+    scene.remove(bottleObj);
+  }
 }
