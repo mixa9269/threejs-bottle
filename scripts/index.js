@@ -86,13 +86,17 @@ function onWindowResize(event) {
   render();
 }
 
+const LABEL_RATIO = 0.7;
+
 function loadBottle(bottle, label) {
   const loader = new THREE.GLTFLoader();
   loader.load(bottle, function (gltf) {
-    gltf.scene.traverse(({ name, material }) => {
+    gltf.scene.traverse(({ name, material, scale }) => {
       if (name === "label") {
         new THREE.TextureLoader().load(label, (texture) => {
           //Update Texture
+          const textureRatio = texture.image.width / texture.image.height;
+          scale.set(1, (LABEL_RATIO / textureRatio).clamp(0, 1.5), 1);
           material.map = texture;
           material.transparent = true;
           material.side = 3;
@@ -114,3 +118,7 @@ function removeOldBottleIfExists() {
     scene.remove(bottleObj);
   }
 }
+
+Number.prototype.clamp = function(min, max) {
+  return Math.min(Math.max(this, min), max);
+};
