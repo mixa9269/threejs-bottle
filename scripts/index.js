@@ -3,7 +3,19 @@ var bottle, cube_geometry, cube_material;
 var controls;
 var light;
 
+window.addEventListener("message", function(data) {
+  const message = JSON.parse(data.data);
+  switch (message.type) {
+    case 'loadBottle':
+      loadBottle(message.bottle, message.label);
+      break;
+    default:
+      break;
+  }
+})
+
 init();
+window.ReactNativeWebView?.postMessage("inited");
 
 function init() {
   scene = new THREE.Scene();
@@ -28,35 +40,22 @@ function init() {
   camera.position.z = 2.5;
   camera.position.y = 0;
 
-  // load bottle
-
-  const loader = new THREE.GLTFLoader();
-  loader.load("./bottle.glb", function (gltf) {
-    gltf.scene.traverse(({ name, material }) => {
-      if (name === "label") {
-        new THREE.TextureLoader().load("./label.png", (texture) => {
-          //Update Texture
-          material.map = texture;
-          material.transparent = true;
-          material.side = 3;
-          material.alphaTest = 0.5;
-          render();
-          window.ReactNativeWebView?.postMessage("init");
-        });
-      }
-    });
-    scene.add(gltf.scene);
-  });
-
   // Lights
 
   light = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(light);
 
   light = new THREE.PointLight(0xffffff);
-  light.position.y = 1.5;
-  light.position.z = 250;
-  light.position.y = -2;
+  light.position.z = 2.5;
+  light.position.y = 0;
+  light.position.x = -250;
+  light.intensity = 0.5;
+  scene.add(light);
+
+  light = new THREE.PointLight(0xffffff);
+  light.position.z = 2.5;
+  light.position.y = 0;
+  light.position.x = 250;
   light.intensity = 0.5;
   scene.add(light);
 
@@ -83,4 +82,24 @@ function onWindowResize(event) {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   render();
+}
+
+function loadBottle(bottle, label) {
+  const loader = new THREE.GLTFLoader();
+  loader.load(bottle, function (gltf) {
+    gltf.scene.traverse(({ name, material }) => {
+      if (name === "label") {
+        new THREE.TextureLoader().load(label, (texture) => {
+          //Update Texture
+          material.map = texture;
+          material.transparent = true;
+          material.side = 3;
+          material.alphaTest = 0.5;
+          render();
+          window.ReactNativeWebView?.postMessage("loaded");
+        });
+      }
+    });
+    scene.add(gltf.scene);
+  });
 }
