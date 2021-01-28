@@ -4,6 +4,9 @@ var controls;
 var light;
 
 window.addEventListener("message", function(data) {
+  if (!data.data) {
+    return;
+  }
   const message = JSON.parse(data.data);
   switch (message.type) {
     case 'loadBottle':
@@ -23,9 +26,7 @@ function init() {
 
   // renderer
 
-  renderer = new THREE.WebGLRenderer({
-    alpha: true,
-  });
+  renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
@@ -95,8 +96,9 @@ function loadBottle(bottle, label) {
           material.transparent = true;
           material.side = 3;
           material.alphaTest = 0.5;
-          render();
           window.ReactNativeWebView?.postMessage("loaded");
+          controls.reset();
+          render();
         });
       }
     });
